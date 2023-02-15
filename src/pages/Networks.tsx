@@ -1,7 +1,8 @@
 import React from 'react'
 import { useCollection } from 'react-firebase-hooks/firestore'
+import { Link } from 'react-router-dom'
+import NetworkInfo from '../components/NetworkInfo'
 import collections from '../lib/collections'
-import Network from './Network'
 
 const Networks: React.FC = () => {
   const [networksFirebase, loading, error] = useCollection(collections.networks)
@@ -18,7 +19,9 @@ const Networks: React.FC = () => {
   return (
     <div>
       {networks.map(network => (
-        <Network network={network} key={network.name} />
+        <Link key={network.name} to={'/network/' + network.name}>
+          <NetworkInfo network={network} />
+        </Link>
       ))}
     </div>
   )

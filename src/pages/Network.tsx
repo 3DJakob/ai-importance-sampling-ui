@@ -18,6 +18,7 @@ import Switch from 'react-switch'
 import { averageRuns } from '../lib/dataProcessing'
 import ModelVisualization from '../components/ModelVisualization'
 import { Line } from 'react-chartjs-2'
+import { useLoaderData } from 'react-router-dom'
 
 ChartJS.register(
   CategoryScale,
@@ -60,17 +61,25 @@ const BottomContainer = styled.div`
   padding: 20px;
 `
 
-export interface NetworkProps {
-  network: NetworkType
-}
+const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`
 
-const Network: React.FC<NetworkProps> = ({ network }) => {
-  const [firebaseRuns, loading, error] = useCollection(collections.runs)
+const Network: React.FC = () => {
+  const network = useLoaderData() as NetworkType | null
+
+  const [firebaseRuns, , error] = useCollection(collections.runs)
   let runs = firebaseRuns?.docs.map(doc => doc.data())
   const [avarageResults, setAvarageResults] = React.useState(false)
 
-  if (runs == null || loading) {
-    return <div>Loading...</div>
+  if (runs == null) {
+    runs = []
+  }
+
+  if (network == null) {
+    return <div>Could not find the network</div>
   }
 
   if (error != null) {
@@ -82,7 +91,7 @@ const Network: React.FC<NetworkProps> = ({ network }) => {
   }
 
   // create labels as indexed list of size networks[0].accuracyTest.length
-  const labels = Array.from(Array(runs[0].accuracyTest.length).keys())
+  const labels = runs.length > 0 ? Array.from(Array(runs[0].accuracyTest.length).keys()) : []
 
   const data = {
     labels,
@@ -102,7 +111,9 @@ const Network: React.FC<NetworkProps> = ({ network }) => {
       </TopContainer>
       <BottomContainer>
         <Line options={options} data={data} />
-        <p>Avarage out runs <Switch checked={avarageResults} onChange={setAvarageResults} /></p>
+        <Row>
+          <p style={{ marginRight: 10 }}>Avarage out runs</p><Switch checked={avarageResults} onChange={setAvarageResults} />
+        </Row>
       </BottomContainer>
     </Container>
   )
