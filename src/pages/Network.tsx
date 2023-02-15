@@ -12,7 +12,7 @@ import {
   Colors
 } from 'chart.js'
 import { useCollection } from 'react-firebase-hooks/firestore'
-import collections, { getRunCollection } from '../lib/collections'
+import { getRunCollection } from '../lib/collections'
 import NetworkInfo from '../components/NetworkInfo'
 import styled from 'styled-components'
 import Switch from 'react-switch'
