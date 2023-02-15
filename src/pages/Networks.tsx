@@ -1,6 +1,6 @@
 import React from 'react'
 import { useCollection } from 'react-firebase-hooks/firestore'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import NetworkInfo from '../components/NetworkInfo'
 import collections from '../lib/collections'
 import styled from 'styled-components'

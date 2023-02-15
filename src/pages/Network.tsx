@@ -12,7 +12,7 @@ import {
   Colors
 } from 'chart.js'
 import { useCollection } from 'react-firebase-hooks/firestore'
-import collections from '../lib/collections'
+import collections, { getRunCollection } from '../lib/collections'
 import NetworkInfo from '../components/NetworkInfo'
 import styled from 'styled-components'
 import Switch from 'react-switch'
@@ -80,7 +80,7 @@ const Row = styled.div`
 const Network: React.FC = () => {
   const network = useLoaderData() as NetworkType | null
 
-  const [firebaseRuns, , error] = useCollection(collections.runs)
+  const [firebaseRuns, , error] = useCollection(getRunCollection(network?.name ?? ''))
   let runs = firebaseRuns?.docs.map(doc => doc.data())
   const [avarageResults, setAvarageResults] = React.useState(true)
 
