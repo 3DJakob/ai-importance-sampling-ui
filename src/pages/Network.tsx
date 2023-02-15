@@ -19,6 +19,7 @@ import { averageRuns } from '../lib/dataProcessing'
 import ModelVisualization from '../components/ModelVisualization'
 import { Line } from 'react-chartjs-2'
 import { useLoaderData } from 'react-router-dom'
+import BackButton from '../components/BackButton'
 
 ChartJS.register(
   CategoryScale,
@@ -53,6 +54,13 @@ const TopContainer = styled.div`
   display: flex;
   position: relative;
   height: 400px;
+`
+
+const Floating = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 20px;
 `
 
 const BottomContainer = styled.div`
@@ -107,7 +115,10 @@ const Network: React.FC = () => {
     <Container>
       <TopContainer>
         <ModelVisualization />
-        <NetworkInfo style={{ top: 20, left: 20 }} network={network} />
+        <Floating>
+          <BackButton href='/' />
+          <NetworkInfo network={network} />
+        </Floating>
       </TopContainer>
       <BottomContainer>
         <Line options={options} data={data} />
