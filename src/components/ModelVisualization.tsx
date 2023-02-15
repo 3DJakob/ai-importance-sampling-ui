@@ -9,7 +9,7 @@ export const LAYERTHICKNESSMULTIPLIER = 10
 
 const Container = styled.div`
   width: 100%;
-  height: 50vh;
+  height: 100%;
 `
 
 const ModelVisualization: React.FC = () => {

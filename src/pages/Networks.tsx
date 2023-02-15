@@ -7,8 +7,12 @@ const Networks: React.FC = () => {
   const [networksFirebase, loading, error] = useCollection(collections.networks)
   const networks = networksFirebase?.docs.map(doc => doc.data())
 
-  if (networks == null) {
+  if (networks == null || loading) {
     return <div>Loading...</div>
+  }
+
+  if (error != null) {
+    return <div>Error: {String(error)}</div>
   }
 
   return (

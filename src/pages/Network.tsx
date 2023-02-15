@@ -48,6 +48,18 @@ const Container = styled.div`
   padding: 0;
 `
 
+const TopContainer = styled.div`
+  display: flex;
+  position: relative;
+  height: 400px;
+`
+
+const BottomContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+`
+
 export interface NetworkProps {
   network: NetworkType
 }
@@ -84,10 +96,14 @@ const Network: React.FC<NetworkProps> = ({ network }) => {
 
   return (
     <Container>
-      <ModelVisualization />
-      <Line options={options} data={data} />
-      <p>Avarage out runs <Switch checked={avarageResults} onChange={setAvarageResults} /></p>
-      <NetworkInfo network={network} />
+      <TopContainer>
+        <ModelVisualization />
+        <NetworkInfo style={{ top: 20, left: 20 }} network={network} />
+      </TopContainer>
+      <BottomContainer>
+        <Line options={options} data={data} />
+        <p>Avarage out runs <Switch checked={avarageResults} onChange={setAvarageResults} /></p>
+      </BottomContainer>
     </Container>
   )
 }
