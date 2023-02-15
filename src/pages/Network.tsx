@@ -8,7 +8,8 @@ import {
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Colors
 } from 'chart.js'
 import { useCollection } from 'react-firebase-hooks/firestore'
 import collections from '../lib/collections'
@@ -28,7 +29,8 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Colors
 )
 
 export const options = {
@@ -80,7 +82,7 @@ const Network: React.FC = () => {
 
   const [firebaseRuns, , error] = useCollection(collections.runs)
   let runs = firebaseRuns?.docs.map(doc => doc.data())
-  const [avarageResults, setAvarageResults] = React.useState(false)
+  const [avarageResults, setAvarageResults] = React.useState(true)
 
   if (runs == null) {
     runs = []

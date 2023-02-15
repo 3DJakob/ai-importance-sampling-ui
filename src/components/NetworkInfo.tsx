@@ -3,14 +3,16 @@ import React from 'react'
 import styled from 'styled-components'
 import { Network } from '../lib/types'
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  position: absolute;
+export const Glass = styled.div`
   background-image:linear-gradient(to bottom right, rgba(255,255,255,0.7), rgba(255,255,255,0));
   backdrop-filter: blur(10px);
   box-shadow: 10px 10px 10px rgba(30,30,30,0.1);
-  padding: 20px;
+`
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
   border-radius: 10px;
 
   h1 {
@@ -30,7 +32,7 @@ export interface NetworkInfoProps {
 
 const NetworkInfo: React.FC<NetworkInfoProps> = ({ network, style }) => {
   return (
-    <Container style={style}>
+    <Container as={Glass} style={style}>
       <h1>{network.name}</h1>
       <p><PieChartOutlined /> Batch size <b>{network.batchSize}</b></p>
       <p><CaretUpOutlined /> Learning rate <b>{network.lr}</b></p>

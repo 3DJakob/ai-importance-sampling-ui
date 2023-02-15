@@ -44,7 +44,7 @@ export const getSpacing = (nodes: Network3D): number[] => {
   return spacing
 }
 
-export const sampleNetork3D: Network3D = [
+export const sampleNetwork3D: Network3D = [
   {
     type: NodeTypes.convolution,
     x: 96,

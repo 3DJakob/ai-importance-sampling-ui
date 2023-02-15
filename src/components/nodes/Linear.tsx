@@ -15,7 +15,7 @@ export const getLinearDepth = (node: LinearNode3D): number => {
   return node.x * LAYERTHICKNESSMULTIPLIER
 }
 
-const Linear: React.FC<PoolingProps> = ({ node, float = 100, config, color = '#FF718F', position }) => {
+const Linear: React.FC<PoolingProps> = ({ node, float = 50, config, color = '#FF718F', position }) => {
   return (
     <Float floatIntensity={float} rotationIntensity={0} speed={2}>
       <mesh position={position}>

@@ -16,7 +16,7 @@ export const getPoolingDepth = (): number => {
   return LAYERTHICKNESSMULTIPLIER * 10
 }
 
-const Pooling: React.FC<PoolingProps> = ({ node, float = 100, config, color = '#29C1A2', position }) => {
+const Pooling: React.FC<PoolingProps> = ({ node, float = 50, config, color = '#29C1A2', position }) => {
   const { x, scale } = node
   // y unused for now as it is always = x
 

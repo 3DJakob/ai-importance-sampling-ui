@@ -16,7 +16,7 @@ export const getConvolutionDepth = (node: ConvolutionNode3D): number => {
   return node.channels * LAYERTHICKNESSMULTIPLIER
 }
 
-const Convolution: React.FC<PoolingProps> = ({ node, float = 100, config, color = '#FF9060', position }) => {
+const Convolution: React.FC<PoolingProps> = ({ node, float = 50, config, color = '#FF9060', position }) => {
   const { x, y } = node
 
   const rot: Euler = new Euler(0, Math.PI, -Math.PI / 2, 'XYZ')

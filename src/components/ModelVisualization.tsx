@@ -1,9 +1,9 @@
 import { Canvas } from '@react-three/fiber'
 import { Environment, Lightformer } from '@react-three/drei'
-import { useControls } from 'leva'
 import styled from 'styled-components'
 import Node from './nodes'
-import { getSpacing, sampleNetork3D } from './nodes/helper'
+import { getSpacing, sampleNetwork3D } from './nodes/helper'
+import { Network3D } from '../lib/types'
 
 export const LAYERTHICKNESSMULTIPLIER = 10
 
@@ -12,14 +12,18 @@ const Container = styled.div`
   height: 100%;
 `
 
-const ModelVisualization: React.FC = () => {
+interface ModelVisualizationProps {
+  network3D?: Network3D
+}
+
+const ModelVisualization: React.FC<ModelVisualizationProps> = ({ network3D }) => {
   return (
     <Container>
       <Canvas orthographic camera={{ position: [-6, 2, -2], zoom: 200, near: -29 }}>
         <color attach='background' args={['#fef4ef']} />
         <ambientLight />
         <directionalLight castShadow intensity={0.6} position={[0, 0, 10]} />
-        <Scene scale={0.01} />
+        <Scene scale={0.01} network3D={network3D} />
         {/* <OrbitControls makeDefault /> */}
         <Environment resolution={256}>
           <group rotation={[-Math.PI / 2, 0, 0]}>
@@ -39,36 +43,40 @@ const ModelVisualization: React.FC = () => {
 
 interface SceneProps {
   scale: number
+  network3D?: Network3D
 }
 
-const Scene: React.FC<SceneProps> = ({ ...props }) => {
-  const config = useControls({
+const Scene: React.FC<SceneProps> = ({ scale, network3D }) => {
+  const config = {
     backside: false,
-    samples: { value: 16, min: 1, max: 32, step: 1 },
-    resolution: { value: 256, min: 64, max: 2048, step: 64 },
-    transmission: { value: 0.95, min: 0, max: 1 },
-    roughness: { value: 0.5, min: 0, max: 1, step: 0.01 },
-    clearcoat: { value: 0.1, min: 0, max: 1, step: 0.01 },
-    clearcoatRoughness: { value: 0.1, min: 0, max: 1, step: 0.01 },
-    thickness: { value: 200, min: 0, max: 200, step: 0.01 },
-    backsideThickness: { value: 200, min: 0, max: 200, step: 0.01 },
-    ior: { value: 1.5, min: 1, max: 5, step: 0.01 },
-    chromaticAberration: { value: 1, min: 0, max: 1 },
-    anisotropy: { value: 1, min: 0, max: 10, step: 0.01 },
-    distortion: { value: 0, min: 0, max: 1, step: 0.01 },
-    distortionScale: { value: 0.2, min: 0.01, max: 1, step: 0.01 },
-    temporalDistortion: { value: 0, min: 0, max: 1, step: 0.01 },
-    attenuationDistance: { value: 0.5, min: 0, max: 10, step: 0.01 },
+    samples: 16,
+    resolution: 256,
+    transmission: 0.95,
+    roughness: 0.5,
+    clearcoat: 0.1,
+    clearcoatRoughness: 0.1,
+    thickness: 200,
+    backsideThickness: 200,
+    ior: 1.5,
+    chromaticAberration: 1,
+    anisotropy: 1,
+    distortion: 0,
+    distortionScale: 0.2,
+    temporalDistortion: 0,
+    attenuationDistance: 0.5,
     attenuationColor: '#ffffff',
     color: '#ffffff'
-  })
+  }
+  if (network3D == null) {
+    network3D = sampleNetwork3D
+  }
 
-  const spacing = getSpacing(sampleNetork3D)
+  const spacing = getSpacing(network3D)
 
   return (
     <>
-      <group {...props}>
-        {sampleNetork3D.map((layer, i) => {
+      <group scale={scale}>
+        {network3D.map((layer, i) => {
           return (
             <Node
               key={i}
