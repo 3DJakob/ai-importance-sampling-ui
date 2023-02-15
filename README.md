@@ -5,7 +5,7 @@
 
 This repository contains the code for the UI of a thesis project revolving around the use if importance sampling in AI. The thesis project is carried out by the University of Linköping.
 
-Visit the live version of the project [here](https://ai-importance-sampling.web.app/).
+Visit the live version of the project [here](https://ai-sampling.web.app/).
 
 ## Installation
 
