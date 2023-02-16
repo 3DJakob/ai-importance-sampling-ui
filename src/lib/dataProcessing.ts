@@ -1,4 +1,5 @@
 import { NetworkRun } from './types'
+import regression, { DataPoint, Result } from 'regression'
 
 export const averageRuns = (runs: NetworkRun[]): NetworkRun[] => {
   const newRuns: NetworkRun[] = []
@@ -24,4 +25,23 @@ export const averageRuns = (runs: NetworkRun[]): NetworkRun[] => {
   }
 
   return newRuns
+}
+
+export interface TrendLine {
+  slope: number
+  yStart: number
+  calcY: (x: number) => number
+}
+
+export const toTrendLine = (values: DataPoint[]): Result => {
+  const trend = regression.polynomial(values, { order: 5, precision: 40 })
+  return trend
+}
+
+export const arrayToChartData = (values: number[]): DataPoint[] => {
+  return values.map((value, index) => [index, value])
+}
+
+export const chartDataToArray = (values: DataPoint[]): number[] => {
+  return values.map(value => value[1])
 }

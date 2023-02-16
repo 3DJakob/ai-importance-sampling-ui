@@ -16,7 +16,7 @@ import { getRunCollection } from '../lib/collections'
 import NetworkInfo from '../components/NetworkInfo'
 import styled from 'styled-components'
 import Switch from 'react-switch'
-import { averageRuns } from '../lib/dataProcessing'
+import { arrayToChartData, averageRuns, chartDataToArray, toTrendLine } from '../lib/dataProcessing'
 import ModelVisualization from '../components/ModelVisualization'
 import { Line } from 'react-chartjs-2'
 import { useLoaderData } from 'react-router-dom'
@@ -83,6 +83,7 @@ const Network: React.FC = () => {
   const [firebaseRuns, , error] = useCollection(getRunCollection(network?.name ?? ''))
   let runs = firebaseRuns?.docs.map(doc => doc.data())
   const [avarageResults, setAvarageResults] = React.useState(true)
+  const [showTrendLines, setShowTrendLines] = React.useState(true)
 
   if (runs == null) {
     runs = []
@@ -113,6 +114,27 @@ const Network: React.FC = () => {
     }))
   }
 
+  if (showTrendLines) {
+    if (data.datasets.length > 0) {
+      const trendDataSets = data.datasets.map(dataset => {
+        const cutIndex = dataset.data.findIndex(value => isNaN(value))
+        if (cutIndex !== -1) {
+          dataset.data = dataset.data.slice(0, cutIndex)
+        }
+        const chartData = arrayToChartData(dataset.data)
+        const { predict } = toTrendLine(chartData)
+        const trendLine = chartDataToArray(Array.from(Array(dataset.data.length).keys()).map(index => predict(index)))
+
+        return {
+          label: dataset.label + ' trend line',
+          data: trendLine
+        }
+      })
+
+      trendDataSets.forEach(trendDataSet => data.datasets.push(trendDataSet))
+    }
+  }
+
   return (
     <Container>
       <TopContainer>
@@ -126,6 +148,9 @@ const Network: React.FC = () => {
         <Line options={options} data={data} />
         <Row>
           <p style={{ marginRight: 10 }}>Avarage out runs</p><Switch checked={avarageResults} onChange={setAvarageResults} />
+        </Row>
+        <Row>
+          <p style={{ marginRight: 10 }}>Show trend lines</p><Switch checked={showTrendLines} onChange={setShowTrendLines} />
         </Row>
       </BottomContainer>
     </Container>
