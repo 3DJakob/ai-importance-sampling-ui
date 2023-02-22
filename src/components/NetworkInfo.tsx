@@ -7,13 +7,13 @@ export const Glass = styled.div`
   background-image:linear-gradient(to bottom right, rgba(255,255,255,0.7), rgba(255,255,255,0));
   backdrop-filter: blur(10px);
   box-shadow: 10px 10px 10px rgba(30,30,30,0.1);
+  border-radius: 10px;
 `
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   padding: 30px;
-  border-radius: 10px;
 
   h1 {
     margin: 0 0 12px 0;

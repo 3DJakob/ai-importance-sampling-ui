@@ -1,9 +1,11 @@
 import { Canvas } from '@react-three/fiber'
-import { Environment, Lightformer } from '@react-three/drei'
+import { Environment, Lightformer, OrbitControls } from '@react-three/drei'
 import styled from 'styled-components'
 import Node from './nodes'
 import { getSpacing, sampleNetwork3D } from './nodes/helper'
-import { Network3D } from '../lib/types'
+import { Network3D, Node3D } from '../lib/types'
+import { useState } from 'react'
+import Overlay from './Overlay'
 
 export const LAYERTHICKNESSMULTIPLIER = 10
 
@@ -17,14 +19,23 @@ interface ModelVisualizationProps {
 }
 
 const ModelVisualization: React.FC<ModelVisualizationProps> = ({ network3D }) => {
+  const [hovering, setHovering] = useState<Node3D | null>(null)
+
+  const handleLeave = (node: Node3D): void => {
+    if (node.type === hovering?.type && node.x === hovering?.x) {
+      setHovering(null)
+    }
+  }
+
   return (
     <Container>
+      {(hovering != null) && <Overlay><p>{hovering.type}</p></Overlay>}
       <Canvas orthographic camera={{ position: [-6, 2, -2], zoom: 200, near: -29 }}>
         <color attach='background' args={['#fef4ef']} />
         <ambientLight />
-        <directionalLight castShadow intensity={0.6} position={[0, 0, 10]} />
-        <Scene scale={0.01} network3D={network3D} />
-        {/* <OrbitControls makeDefault /> */}
+        <directionalLight castShadow intensity={0.6} position={[0, -2, 10]} />
+        <Scene scale={0.01} network3D={network3D} onPointerEnter={setHovering} onPointerLeave={handleLeave} />
+        <OrbitControls makeDefault />
         <Environment resolution={256}>
           <group rotation={[-Math.PI / 2, 0, 0]}>
             <Lightformer intensity={4} rotation-x={Math.PI / 2} position={[0, 5, -9]} scale={[10, 10, 1]} />
@@ -44,9 +55,11 @@ const ModelVisualization: React.FC<ModelVisualizationProps> = ({ network3D }) =>
 interface SceneProps {
   scale: number
   network3D?: Network3D
+  onPointerEnter: (node: Node3D) => void
+  onPointerLeave: (node: Node3D) => void
 }
 
-const Scene: React.FC<SceneProps> = ({ scale, network3D }) => {
+const Scene: React.FC<SceneProps> = ({ scale, network3D, onPointerEnter, onPointerLeave }) => {
   const config = {
     backside: false,
     samples: 16,
@@ -83,6 +96,8 @@ const Scene: React.FC<SceneProps> = ({ scale, network3D }) => {
               node={layer}
               config={config}
               position={[0, 0, spacing[i]]}
+              onPointerEnter={() => onPointerEnter(layer)}
+              onPointerLeave={() => onPointerLeave(layer)}
             />
           )
         })}
