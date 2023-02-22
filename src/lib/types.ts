@@ -17,6 +17,10 @@ export interface NetworkRun {
   name: string
 }
 
+export interface NetworkLoss {
+  loss: number[]
+}
+
 // 3D network data
 export type Network3D = Node3D[]
 

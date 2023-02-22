@@ -21,6 +21,7 @@ import ModelVisualization from '../components/ModelVisualization'
 import { Line } from 'react-chartjs-2'
 import { useLoaderData } from 'react-router-dom'
 import BackButton from '../components/BackButton'
+import LossWindowGraph from '../components/LossWindowGraph'
 
 ChartJS.register(
   CategoryScale,
@@ -152,6 +153,7 @@ const Network: React.FC = () => {
         <Row>
           <p style={{ marginRight: 10 }}>Show trend lines</p><Switch checked={showTrendLines} onChange={setShowTrendLines} />
         </Row>
+        <LossWindowGraph network={network} />
       </BottomContainer>
     </Container>
   )
