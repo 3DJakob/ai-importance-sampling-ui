@@ -6,6 +6,7 @@ export interface Network {
   optimizer: string
   lossFunction: string
   model: string
+  nodes?: Network3D
 }
 
 export interface NetworkRun {

@@ -139,7 +139,7 @@ const Network: React.FC = () => {
   return (
     <Container>
       <TopContainer>
-        <ModelVisualization />
+        <ModelVisualization nodes={network.nodes} />
         <Floating>
           <BackButton href='/' />
           <NetworkInfo network={network} />

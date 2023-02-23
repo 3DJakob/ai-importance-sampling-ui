@@ -6,6 +6,7 @@ import { getSpacing, sampleNetwork3D } from './nodes/helper'
 import { Network3D, Node3D } from '../lib/types'
 import { useState } from 'react'
 import Overlay from './Overlay'
+import HoverInfo from './nodes/HoverInfo'
 
 export const LAYERTHICKNESSMULTIPLIER = 10
 
@@ -15,10 +16,10 @@ const Container = styled.div`
 `
 
 interface ModelVisualizationProps {
-  network3D?: Network3D
+  nodes?: Network3D
 }
 
-const ModelVisualization: React.FC<ModelVisualizationProps> = ({ network3D }) => {
+const ModelVisualization: React.FC<ModelVisualizationProps> = ({ nodes }) => {
   const [hovering, setHovering] = useState<Node3D | null>(null)
 
   const handleLeave = (node: Node3D): void => {
@@ -29,12 +30,12 @@ const ModelVisualization: React.FC<ModelVisualizationProps> = ({ network3D }) =>
 
   return (
     <Container>
-      {(hovering != null) && <Overlay><p>{hovering.type}</p></Overlay>}
+      {(hovering != null) && <Overlay><HoverInfo node={hovering} /></Overlay>}
       <Canvas orthographic camera={{ position: [-6, 2, -2], zoom: 200, near: -29 }}>
         <color attach='background' args={['#fef4ef']} />
         <ambientLight />
         <directionalLight castShadow intensity={0.6} position={[0, -2, 10]} />
-        <Scene scale={0.01} network3D={network3D} onPointerEnter={setHovering} onPointerLeave={handleLeave} />
+        <Scene scale={0.01} network3D={nodes} onPointerEnter={setHovering} onPointerLeave={handleLeave} />
         <OrbitControls makeDefault />
         <Environment resolution={256}>
           <group rotation={[-Math.PI / 2, 0, 0]}>
