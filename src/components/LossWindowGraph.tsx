@@ -24,7 +24,6 @@ export interface LossWindowGraphProps {
 const LossWindowGraph: React.FC<LossWindowGraphProps> = ({ network }) => {
   const [firebaseLoss, ,] = useCollection(getLossCollection(network?.name ?? ''))
   let runs = firebaseLoss?.docs.map(doc => doc.data())
-  console.log(runs)
   if (runs == null) {
     runs = []
   }
