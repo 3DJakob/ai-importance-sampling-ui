@@ -7,25 +7,38 @@ import styled from 'styled-components'
 import bg from '../assets/bg.webp'
 import { Network } from '../lib/types'
 
-// load bg.webp from assets folder
 const Background = styled.div`
   background-image: url(${bg});
   background-size: cover;
+  background-color: #fef4ef;
   background-position: center;
   background-repeat: no-repeat;
-  height: 100vh;
   width: 100vw;
+  height: 100vh;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
+`
+
+const Grid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 20px;
+  padding: 20px;
+  width: 100%;
+  align-content: start;
 `
 
 const Button = styled.div`
   cursor: pointer;
-  transition: 0.2s;
-  margin: 20px;
+  
+  div {
+    transition: 0.2s;
+  }
 
-  :hover {
+  div:hover {
     background-color: rgba(255, 255, 255, 0.2);
+    transform: scale(1.01);
   }
 `
 
@@ -48,11 +61,13 @@ const Networks: React.FC = () => {
 
   return (
     <Background>
-      {networks.map(network => (
-        <Button key={network.name} onClick={() => handlePress(network)}>
-          <NetworkInfo network={network} />
-        </Button>
-      ))}
+      <Grid>
+        {networks.map(network => (
+          <Button key={network.name} onClick={() => handlePress(network)}>
+            <NetworkInfo network={network} />
+          </Button>
+        ))}
+      </Grid>
     </Background>
   )
 }
