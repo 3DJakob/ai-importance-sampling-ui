@@ -27,6 +27,7 @@
     "react-firebase-hooks": "^5.1.1",
     "react-router-dom": "^6.8.1",
     "react-scripts": "5.0.1",
+    "react-spinners": "^0.13.8",
     "react-switch": "^7.0.0",
     "regression": "^2.0.1",
     "styled-components": "^5.3.6",

@@ -6,6 +6,7 @@ import collections from '../lib/collections'
 import styled from 'styled-components'
 import bg from '../assets/bg.webp'
 import { Network } from '../lib/types'
+import Loading from '../components/Loading'
 
 const Background = styled.div`
   background-image: url(${bg});
@@ -16,7 +17,7 @@ const Background = styled.div`
   width: 100vw;
   height: 100vh;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   flex-wrap: wrap;
 `
 
@@ -47,10 +48,6 @@ const Networks: React.FC = () => {
   const networks = networksFirebase?.docs.map(doc => doc.data())
   const navigate = useNavigate()
 
-  if (networks == null || loading) {
-    return <div>Loading...</div>
-  }
-
   if (error != null) {
     return <div>Error: {String(error)}</div>
   }
@@ -61,13 +58,18 @@ const Networks: React.FC = () => {
 
   return (
     <Background>
-      <Grid>
-        {networks.map(network => (
-          <Button key={network.name} onClick={() => handlePress(network)}>
-            <NetworkInfo network={network} />
-          </Button>
-        ))}
-      </Grid>
+      {(networks == null || loading) && <Loading />}
+      {
+        networks != null && (
+          <Grid>
+            {networks?.map(network => (
+              <Button key={network.name} onClick={() => handlePress(network)}>
+                <NetworkInfo network={network} />
+              </Button>
+            ))}
+          </Grid>
+        )
+      }
     </Background>
   )
 }
