@@ -17,6 +17,10 @@ const Container = styled.div`
   display: flex;
   margin-bottom: 20px;
   cursor: pointer;
+  transition: transform 0.2s;
+
+  :hover {
+    transform: scale(1.1);
 `
 
 const BackButton: React.FC<BackButtonProps> = ({ href }) => {
