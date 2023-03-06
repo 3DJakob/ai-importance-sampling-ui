@@ -52,7 +52,7 @@ const LossWindowGraph: React.FC<LossWindowGraphProps> = ({ network }) => {
       })
     },
     {
-      label: 'Distrobution',
+      label: 'Distribution',
       data: runs[0]?.loss != null ? [...runs[0].loss].sort((a, b) => a - b) : []
     }]
   }
