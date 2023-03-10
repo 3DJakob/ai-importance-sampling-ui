@@ -84,7 +84,7 @@ const Network: React.FC = () => {
 
   const [firebaseRuns, , error] = useCollection(getRunCollection(network?.name ?? ''))
   let runs = firebaseRuns?.docs.map(doc => doc.data())
-  const [avarageResults, setAvarageResults] = React.useState(true)
+  const [averageResults, setAverageResults] = React.useState(true)
   const [showTrendLines, setShowTrendLines] = useShowTrendlines()
 
   if (runs == null) {
@@ -99,7 +99,7 @@ const Network: React.FC = () => {
     return <div>Error: {error.message}</div>
   }
 
-  if (avarageResults) {
+  if (averageResults) {
     runs = averageRuns(runs)
   }
 
@@ -149,7 +149,7 @@ const Network: React.FC = () => {
       <BottomContainer>
         <Line options={options} data={data} />
         <Row>
-          <p style={{ marginRight: 10 }}>Avarage out runs</p><Switch checked={avarageResults} onChange={setAvarageResults} />
+          <p style={{ marginRight: 10 }}>Average out runs</p><Switch checked={averageResults} onChange={setAverageResults} />
         </Row>
         <Row>
           <p style={{ marginRight: 10 }}>Show trend lines</p><Switch checked={showTrendLines} onChange={setShowTrendLines} />
