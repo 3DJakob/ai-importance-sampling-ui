@@ -9,6 +9,8 @@ export interface Network {
   nodes?: Network3D
 }
 
+export type WithID<T> = T & { id: string }
+
 export interface NetworkRun {
   timestamps: number[]
   accuracyTrain: number[]

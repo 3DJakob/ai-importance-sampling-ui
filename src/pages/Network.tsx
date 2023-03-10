@@ -1,5 +1,5 @@
 import React from 'react'
-import { Network as NetworkType } from '../lib/types'
+import { Network as NetworkType, NetworkRun, WithID } from '../lib/types'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -22,6 +22,7 @@ import { Line } from 'react-chartjs-2'
 import { useLoaderData } from 'react-router-dom'
 import BackButton from '../components/BackButton'
 import LossWindowGraph from '../components/LossWindowGraph'
+import Runs from '../components/RunsInfo'
 import useShowTrendlines from '../lib/useShowTrendlines'
 
 ChartJS.register(
@@ -83,7 +84,8 @@ const Network: React.FC = () => {
   const network = useLoaderData() as NetworkType | null
 
   const [firebaseRuns, , error] = useCollection(getRunCollection(network?.name ?? ''))
-  let runs = firebaseRuns?.docs.map(doc => doc.data())
+  let runs = firebaseRuns?.docs.map(doc => ({ ...doc.data(), id: doc.id })) as Array<WithID<NetworkRun>>
+  let processedRuns = runs
   const [averageResults, setAverageResults] = React.useState(true)
   const [showTrendLines, setShowTrendLines] = useShowTrendlines()
 
@@ -100,15 +102,15 @@ const Network: React.FC = () => {
   }
 
   if (averageResults) {
-    runs = averageRuns(runs)
+    processedRuns = averageRuns(runs)
   }
 
   // create labels as indexed list of size networks[0].accuracyTest.length
-  const labels = runs.length > 0 ? Array.from(Array(runs[0].accuracyTest.length).keys()) : []
+  const labels = processedRuns.length > 0 ? Array.from(Array(processedRuns[0].accuracyTest.length).keys()) : []
 
   const data = {
     labels,
-    datasets: runs.map(run => ({
+    datasets: processedRuns.map(run => ({
       label: run.name,
       data: run.accuracyTest
       // borderColor: 'rgb(255, 99, 132)',
@@ -154,6 +156,7 @@ const Network: React.FC = () => {
         <Row>
           <p style={{ marginRight: 10 }}>Show trend lines</p><Switch checked={showTrendLines} onChange={setShowTrendLines} />
         </Row>
+        <Runs runs={runs} />
         <LossWindowGraph network={network} />
       </BottomContainer>
     </Container>
