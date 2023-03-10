@@ -43,7 +43,6 @@ const App: React.FC = () => {
   return (
     <>
       <GlobalStyle />
-      {/* <Networks /> */}
       <RouterProvider router={router} />
     </>
   )
