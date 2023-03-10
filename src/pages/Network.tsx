@@ -22,6 +22,7 @@ import { Line } from 'react-chartjs-2'
 import { useLoaderData } from 'react-router-dom'
 import BackButton from '../components/BackButton'
 import LossWindowGraph from '../components/LossWindowGraph'
+import useShowTrendlines from '../lib/useShowTrendlines'
 
 ChartJS.register(
   CategoryScale,
@@ -84,7 +85,7 @@ const Network: React.FC = () => {
   const [firebaseRuns, , error] = useCollection(getRunCollection(network?.name ?? ''))
   let runs = firebaseRuns?.docs.map(doc => doc.data())
   const [avarageResults, setAvarageResults] = React.useState(true)
-  const [showTrendLines, setShowTrendLines] = React.useState(true)
+  const [showTrendLines, setShowTrendLines] = useShowTrendlines()
 
   if (runs == null) {
     runs = []
