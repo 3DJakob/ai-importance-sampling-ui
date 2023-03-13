@@ -39,6 +39,7 @@ export interface TableProps<T = any> {
   renderItem: (item: T) => React.ReactNode
   as: React.ElementType | undefined
   sortBy?: string
+  sortOrder?: 'asc' | 'desc'
 }
 
 const sort = (data: any[], sortBy: string | undefined): any[] => {
@@ -73,8 +74,12 @@ const sort = (data: any[], sortBy: string | undefined): any[] => {
   })
 }
 
-const Table: React.FC<TableProps> = ({ as, header, data, renderItem, sortBy }) => {
+const Table: React.FC<TableProps> = ({ as, header, data, renderItem, sortBy, sortOrder = 'asc' }) => {
   data = sort(data, sortBy)
+
+  if (sortOrder === 'desc') {
+    data = data.reverse()
+  }
 
   return (
     <StyledTable as={as}>

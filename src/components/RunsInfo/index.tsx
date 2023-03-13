@@ -16,21 +16,49 @@ export interface RunsProps {
 
 const Runs: React.FC<RunsProps> = ({ runs }) => {
   const [sortBy, setSortBy] = React.useState<string | undefined>(undefined)
+  const [sortOrder, setSortOrder] = React.useState<'asc' | 'desc'>('asc')
+
+  const preparedData = runs.map((run) => {
+    const bestAccuracy = run.accuracyTest.reduce((acc, curr) => {
+      if (curr > acc) {
+        return curr
+      }
+      return acc
+    }, 0)
+    return {
+      ...run,
+      baches: run.accuracyTest.length,
+      bestAccuracy
+    }
+  })
+
+  const toggleSortBy = (key: string): void => {
+    if (sortBy === key) {
+      if (sortOrder === 'asc') {
+        setSortOrder('desc')
+      } else {
+        setSortOrder('asc')
+      }
+    } else {
+      setSortBy(key)
+    }
+  }
 
   return (
     <Container>
       <Table
-        as={TableTheme} data={runs} renderItem={(data => <Run run={data} />)} header={
+        as={TableTheme} data={preparedData} renderItem={(data => <Run run={data} />)} header={
           <thead>
             <tr>
-              <th style={{ cursor: 'pointer' }} onClick={() => setSortBy('id')}>ID</th>
-              <th style={{ cursor: 'pointer' }} onClick={() => setSortBy('name')}>Name</th>
-              <th>Batches</th>
-              <th>Best Accuracy</th>
+              <th style={{ cursor: 'pointer' }} onClick={() => toggleSortBy('id')}>ID</th>
+              <th style={{ cursor: 'pointer' }} onClick={() => toggleSortBy('name')}>Name</th>
+              <th style={{ cursor: 'pointer' }} onClick={() => toggleSortBy('batches')}>Batches</th>
+              <th style={{ cursor: 'pointer' }} onClick={() => toggleSortBy('bestAccuracy')}>Best Accuracy</th>
             </tr>
           </thead>
       }
         sortBy={sortBy}
+        sortOrder={sortOrder}
       />
     </Container>
   )
