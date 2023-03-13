@@ -20,7 +20,7 @@ export const TableTheme = styled.table`
 
 const StyledTable = styled.table`
   width: 100%;
-  font: 16px sans-serif;
+  font: 16px;
   border-collapse: collapse;
 
   td {
