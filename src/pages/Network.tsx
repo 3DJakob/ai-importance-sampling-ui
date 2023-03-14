@@ -26,6 +26,7 @@ import RelativeAccuracyGraph from '../components/RelativeAccuracyGraph'
 import Runs from '../components/RunsInfo'
 import useShowTrendlines from '../lib/useShowTrendlines'
 import useAverageResults from '../lib/useAverageResults'
+import zoomPlugin from 'chartjs-plugin-zoom'
 
 ChartJS.register(
   CategoryScale,
@@ -35,7 +36,8 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  Colors
+  Colors,
+  zoomPlugin
 )
 
 export const options = {
@@ -47,6 +49,21 @@ export const options = {
     title: {
       display: true,
       text: 'Chart.js Line Chart'
+    },
+    zoom: {
+      pan: {
+        enabled: true,
+        mode: 'xy'
+      },
+      zoom: {
+        wheel: {
+          enabled: true
+        },
+        pinch: {
+          enabled: true
+        },
+        mode: 'xy'
+      }
     }
   }
 }
@@ -151,7 +168,7 @@ const Network: React.FC = () => {
         </Floating>
       </TopContainer>
       <BottomContainer>
-        <Line options={options} data={data} />
+        <Line options={options as any} data={data} />
         <Row>
           <p style={{ marginRight: 10 }}>Average out runs</p><Switch checked={averageResults} onChange={setAverageResults} />
         </Row>

@@ -38,6 +38,21 @@ const LossWindowGraph: React.FC<LossWindowGraphProps> = ({ network }) => {
       title: {
         display: true,
         text: `Relative Accuracy (%) compared to ${relativeName}. Values over 0% is better than ${relativeName}`
+      },
+      zoom: {
+        pan: {
+          enabled: true,
+          mode: 'xy'
+        },
+        zoom: {
+          wheel: {
+            enabled: true
+          },
+          pinch: {
+            enabled: true
+          },
+          mode: 'xy'
+        }
       }
     }
   }
@@ -89,7 +104,7 @@ const LossWindowGraph: React.FC<LossWindowGraphProps> = ({ network }) => {
           }
         ]
       }}
-      options={options}
+      options={options as any}
     />
   )
 }
