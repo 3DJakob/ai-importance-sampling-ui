@@ -36,7 +36,6 @@ const useAverageResults = (): [
 
   const updateAverageResults = useCallback(
     (show: boolean) => {
-      console.log('updateAverageResults', show)
       setAverageResults(show)
       localStorage.setItem('avarageResults', show.toString())
     },

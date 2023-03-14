@@ -27,6 +27,9 @@ import Runs from '../components/RunsInfo'
 import useShowTrendlines from '../lib/useShowTrendlines'
 import useAverageResults from '../lib/useAverageResults'
 import zoomPlugin from 'chartjs-plugin-zoom'
+import randomColor from 'randomcolor'
+import { getOptions } from '../lib/graph'
+import { getRunColor } from '../components/RunsInfo/Run'
 
 ChartJS.register(
   CategoryScale,
@@ -39,35 +42,6 @@ ChartJS.register(
   Colors,
   zoomPlugin
 )
-
-export const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: 'top' as const
-    },
-    title: {
-      display: true,
-      text: 'Chart.js Line Chart'
-    },
-    zoom: {
-      pan: {
-        enabled: true,
-        mode: 'xy'
-      },
-      zoom: {
-        wheel: {
-          enabled: true,
-          modifierKey: 'ctrl'
-        },
-        pinch: {
-          enabled: true
-        },
-        mode: 'xy'
-      }
-    }
-  }
-}
 
 const Container = styled.div`
   display: flex;
@@ -122,7 +96,7 @@ const Network: React.FC = () => {
   }
 
   if (averageResults) {
-    processedRuns = averageRuns(runs) as Array<WithID<NetworkRun>>
+    processedRuns = averageRuns(runs) 
   }
 
   // create labels as indexed list of size networks[0].accuracyTest.length
@@ -130,11 +104,10 @@ const Network: React.FC = () => {
 
   const data = {
     labels,
-    datasets: processedRuns.map(run => ({
+    datasets: processedRuns.map((run, i) => ({
       label: run.name,
-      data: run.accuracyTest
-      // borderColor: 'rgb(255, 99, 132)',
-      // backgroundColor: 'rgba(255, 99, 132, 0.5)'
+      data: run.accuracyTest,
+      borderColor: getRunColor(run)
     }))
   }
 
@@ -151,7 +124,8 @@ const Network: React.FC = () => {
 
         return {
           label: dataset.label + ' trend line',
-          data: trendLine
+          data: trendLine,
+          borderColor: dataset.borderColor
         }
       })
 
@@ -169,7 +143,7 @@ const Network: React.FC = () => {
         </Floating>
       </TopContainer>
       <BottomContainer>
-        <Line options={options as any} data={data} />
+        <Line options={getOptions('Accuracy over batch number')} data={data} />
         <Row>
           <p style={{ marginRight: 10 }}>Average out runs</p><Switch checked={averageResults} onChange={setAverageResults} />
         </Row>

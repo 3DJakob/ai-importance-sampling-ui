@@ -52,6 +52,7 @@ const Runs: React.FC<RunsProps> = ({ runs }) => {
             <tr>
               <th style={{ cursor: 'pointer' }} onClick={() => toggleSortBy('id')}>ID</th>
               <th style={{ cursor: 'pointer' }} onClick={() => toggleSortBy('name')}>Name</th>
+              <th style={{ cursor: 'pointer' }} onClick={() => toggleSortBy('name')}>Color</th>
               <th style={{ cursor: 'pointer' }} onClick={() => toggleSortBy('batches')}>Batches</th>
               <th style={{ cursor: 'pointer' }} onClick={() => toggleSortBy('bestAccuracy')}>Best Accuracy</th>
             </tr>

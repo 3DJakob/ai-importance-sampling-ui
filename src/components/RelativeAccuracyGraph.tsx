@@ -1,10 +1,13 @@
 import React from 'react'
-import { Network, NetworkRun } from '../lib/types'
+import { Network, NetworkRun, WithID } from '../lib/types'
 import { Line } from 'react-chartjs-2'
 import { useCollection } from 'react-firebase-hooks/firestore'
 import { getRunCollection } from '../lib/collections'
 import useAverageResults from '../lib/useAverageResults'
 import { averageRuns } from '../lib/dataProcessing'
+import randomColor from 'randomcolor'
+import { getOptions } from '../lib/graph'
+import { getRunColor } from './RunsInfo/Run'
 
 export interface LossWindowGraphProps {
   network: Network
@@ -22,41 +25,12 @@ const getComparisonName = (runs: NetworkRun[]): string => {
 
 const LossWindowGraph: React.FC<LossWindowGraphProps> = ({ network }) => {
   const [averageResults] = useAverageResults()
-  const [firebaseRun, ,] = useCollection(getRunCollection(network?.name ?? ''))
-  let runs = firebaseRun?.docs.map(doc => doc.data())
+  const [firebaseRuns, ,] = useCollection(getRunCollection(network?.name ?? ''))
+  let runs = firebaseRuns?.docs.map(doc => ({ ...doc.data(), id: doc.id })) as Array<WithID<NetworkRun>>
   if (runs == null) {
     runs = []
   }
   const relativeName = getComparisonName(runs)
-
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: 'top' as const
-      },
-      title: {
-        display: true,
-        text: `Relative Accuracy (%) compared to ${relativeName}. Values over 0% is better than ${relativeName}`
-      },
-      zoom: {
-        pan: {
-          enabled: true,
-          mode: 'xy'
-        },
-        zoom: {
-          wheel: {
-            enabled: true,
-            modifierKey: 'ctrl'
-          },
-          pinch: {
-            enabled: true
-          },
-          mode: 'xy'
-        }
-      }
-    }
-  }
 
   // filter out runs and merge them
   const baseLines = runs.filter(run => run.name === relativeName)
@@ -68,7 +42,7 @@ const LossWindowGraph: React.FC<LossWindowGraphProps> = ({ network }) => {
     })
     : []
 
-  let plotRuns: NetworkRun[] = runs.filter(run => run.name !== relativeName).map(run => {
+  let plotRuns: Array<WithID<NetworkRun>> = runs.filter(run => run.name !== relativeName).map(run => {
     return {
       ...run,
       accuracyTest: run.accuracyTest.map((val, i) => {
@@ -93,8 +67,7 @@ const LossWindowGraph: React.FC<LossWindowGraphProps> = ({ network }) => {
               label: run.name,
               data: run.accuracyTest.map(val => val * 100),
               fill: false,
-              borderColor: 'rgb(75, 192, 192)',
-              tension: 0.1
+              borderColor: getRunColor(run)
             }
           }),
           {
@@ -105,7 +78,7 @@ const LossWindowGraph: React.FC<LossWindowGraphProps> = ({ network }) => {
           }
         ]
       }}
-      options={options as any}
+      options={getOptions(`Relative Accuracy (%) compared to ${relativeName}. Values over 0% is better than ${relativeName}`)}
     />
   )
 }
