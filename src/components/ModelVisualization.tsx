@@ -93,7 +93,7 @@ const Scene: React.FC<SceneProps> = ({ scale, network3D, onPointerEnter, onPoint
         {network3D.map((layer, i) => {
           return (
             <Node
-              key={i}
+              key={`layer-${i}`}
               node={layer}
               config={config}
               position={[0, 0, spacing[i]]}

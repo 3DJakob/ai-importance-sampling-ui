@@ -1,8 +1,8 @@
 import { NetworkRun, WithID } from './types'
 import regression, { DataPoint, Result } from 'regression'
 
-export const averageRuns = (runs: Array<WithID<NetworkRun>>): Array<WithID<NetworkRun>> => {
-  const newRuns: Array<WithID<NetworkRun>> = []
+export const averageRuns = (runs: Array<WithID<NetworkRun>> | NetworkRun[]): Array<WithID<NetworkRun>> | NetworkRun[] => {
+  const newRuns: Array<WithID<NetworkRun> | NetworkRun> = []
 
   for (const run of runs) {
     const existingItem = newRuns.find(newRun => newRun.name === run.name)

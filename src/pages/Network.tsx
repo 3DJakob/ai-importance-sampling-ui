@@ -22,8 +22,10 @@ import { Line } from 'react-chartjs-2'
 import { useLoaderData } from 'react-router-dom'
 import BackButton from '../components/BackButton'
 import LossWindowGraph from '../components/LossWindowGraph'
+import RelativeAccuracyGraph from '../components/RelativeAccuracyGraph'
 import Runs from '../components/RunsInfo'
 import useShowTrendlines from '../lib/useShowTrendlines'
+import useAverageResults from '../lib/useAverageResults'
 
 ChartJS.register(
   CategoryScale,
@@ -85,13 +87,13 @@ const Network: React.FC = () => {
 
   const [firebaseRuns, , error] = useCollection(getRunCollection(network?.name ?? ''))
   let runs = firebaseRuns?.docs.map(doc => ({ ...doc.data(), id: doc.id })) as Array<WithID<NetworkRun>>
-  let processedRuns = runs
-  const [averageResults, setAverageResults] = React.useState(true)
+  const [averageResults, setAverageResults] = useAverageResults()
   const [showTrendLines, setShowTrendLines] = useShowTrendlines()
 
   if (runs == null) {
     runs = []
   }
+  let processedRuns = runs
 
   if (network == null) {
     return <div>Could not find the network</div>
@@ -102,7 +104,7 @@ const Network: React.FC = () => {
   }
 
   if (averageResults) {
-    processedRuns = averageRuns(runs)
+    processedRuns = averageRuns(runs) as Array<WithID<NetworkRun>>
   }
 
   // create labels as indexed list of size networks[0].accuracyTest.length
@@ -157,6 +159,7 @@ const Network: React.FC = () => {
           <p style={{ marginRight: 10 }}>Show trend lines</p><Switch checked={showTrendLines} onChange={setShowTrendLines} />
         </Row>
         <Runs runs={runs} />
+        <RelativeAccuracyGraph network={network} />
         <LossWindowGraph network={network} />
       </BottomContainer>
     </Container>

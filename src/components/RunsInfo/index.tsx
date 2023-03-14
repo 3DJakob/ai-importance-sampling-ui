@@ -15,7 +15,7 @@ export interface RunsProps {
 }
 
 const Runs: React.FC<RunsProps> = ({ runs }) => {
-  const [sortBy, setSortBy] = React.useState<string | undefined>(undefined)
+  const [sortBy, setSortBy] = React.useState<string | undefined>('id')
   const [sortOrder, setSortOrder] = React.useState<'asc' | 'desc'>('asc')
 
   const preparedData = runs.map((run) => {
@@ -47,7 +47,7 @@ const Runs: React.FC<RunsProps> = ({ runs }) => {
   return (
     <Container>
       <Table
-        as={TableTheme} data={preparedData} renderItem={(data => <Run run={data} />)} header={
+        as={TableTheme} data={preparedData} renderItem={(data => <Run run={data} key={data.id} />)} header={
           <thead>
             <tr>
               <th style={{ cursor: 'pointer' }} onClick={() => toggleSortBy('id')}>ID</th>
