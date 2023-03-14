@@ -46,7 +46,8 @@ const LossWindowGraph: React.FC<LossWindowGraphProps> = ({ network }) => {
         },
         zoom: {
           wheel: {
-            enabled: true
+            enabled: true,
+            modifierKey: 'ctrl'
           },
           pinch: {
             enabled: true
