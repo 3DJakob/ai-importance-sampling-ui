@@ -5,7 +5,6 @@ import { useCollection } from 'react-firebase-hooks/firestore'
 import { getRunCollection } from '../lib/collections'
 import useAverageResults from '../lib/useAverageResults'
 import { averageRuns } from '../lib/dataProcessing'
-import randomColor from 'randomcolor'
 import { getOptions } from '../lib/graph'
 import { getRunColor } from './RunsInfo/Run'
 

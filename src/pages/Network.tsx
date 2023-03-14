@@ -27,7 +27,6 @@ import Runs from '../components/RunsInfo'
 import useShowTrendlines from '../lib/useShowTrendlines'
 import useAverageResults from '../lib/useAverageResults'
 import zoomPlugin from 'chartjs-plugin-zoom'
-import randomColor from 'randomcolor'
 import { getOptions } from '../lib/graph'
 import { getRunColor } from '../components/RunsInfo/Run'
 
