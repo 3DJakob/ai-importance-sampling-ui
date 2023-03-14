@@ -96,7 +96,7 @@ const Network: React.FC = () => {
   }
 
   if (averageResults) {
-    processedRuns = averageRuns(runs) 
+    processedRuns = averageRuns(runs)
   }
 
   // create labels as indexed list of size networks[0].accuracyTest.length
