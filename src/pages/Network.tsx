@@ -29,6 +29,7 @@ import useAverageResults from '../lib/useAverageResults'
 import zoomPlugin from 'chartjs-plugin-zoom'
 import { getOptions } from '../lib/graph'
 import { getRunColor } from '../components/RunsInfo/Run'
+import TimestampGraph from '../components/TimestampAccuracyGraph'
 
 ChartJS.register(
   CategoryScale,
@@ -150,6 +151,7 @@ const Network: React.FC = () => {
           <p style={{ marginRight: 10 }}>Show trend lines</p><Switch checked={showTrendLines} onChange={setShowTrendLines} />
         </Row>
         <Runs runs={runs} />
+        <TimestampGraph network={network} />
         <RelativeAccuracyGraph network={network} />
         <LossWindowGraph network={network} />
       </BottomContainer>
