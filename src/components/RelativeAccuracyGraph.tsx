@@ -8,7 +8,7 @@ import { averageRuns } from '../lib/dataProcessing'
 import { getOptions } from '../lib/graph'
 import { getRunColor } from './RunsInfo/Run'
 
-export interface LossWindowGraphProps {
+export interface RelativeAccuracyGraphProps {
   network: Network
   relativeName?: string
 }
@@ -22,7 +22,7 @@ const getComparisonName = (runs: NetworkRun[]): string => {
   return names[0]
 }
 
-const LossWindowGraph: React.FC<LossWindowGraphProps> = ({ network }) => {
+const RelativeAccuracyGraph: React.FC<RelativeAccuracyGraphProps> = ({ network }) => {
   const [averageResults] = useAverageResults()
   const [firebaseRuns, ,] = useCollection(getRunCollection(network?.name ?? ''))
   let runs = firebaseRuns?.docs.map(doc => ({ ...doc.data(), id: doc.id })) as Array<WithID<NetworkRun>>
@@ -82,4 +82,4 @@ const LossWindowGraph: React.FC<LossWindowGraphProps> = ({ network }) => {
   )
 }
 
-export default LossWindowGraph
+export default RelativeAccuracyGraph
