@@ -4,23 +4,11 @@ import { getRunCollection } from '../lib/collections'
 import { Network, NetworkRun, WithID } from '../lib/types'
 import useAverageResults from '../lib/useAverageResults'
 import { Line } from 'react-chartjs-2'
-import { averageRuns } from '../lib/dataProcessing'
+import { averageRunsVaribleTime } from '../lib/dataProcessing'
+import { getOptions } from '../lib/graph'
 
 export interface TimestampGraphProps {
   network: Network
-}
-
-const accumulateTimestamps = (runs: Array<WithID<NetworkRun>>): Array<WithID<NetworkRun>> => {
-  const accumulated = runs.map(run => {
-    const timestamps = run.timestamps.reduce((acc, curr) => {
-      return [...acc, curr + acc[acc.length - 1]]
-    }, [0])
-    return {
-      ...run,
-      timestamps
-    }
-  })
-  return accumulated
 }
 
 const TimestampGraph: React.FC<TimestampGraphProps> = ({ network }) => {
@@ -31,10 +19,12 @@ const TimestampGraph: React.FC<TimestampGraphProps> = ({ network }) => {
     runs = []
   }
 
-  runs = accumulateTimestamps(runs)
+  if (averageResults) {
+    runs = averageRunsVaribleTime(runs)
+  }
 
   const data = {
-    datasets: runs.map(run => {
+    datasets: [...runs.map(run => {
       return {
         label: run.name,
         data: run.accuracyTest.map((val, i) => {
@@ -45,10 +35,7 @@ const TimestampGraph: React.FC<TimestampGraphProps> = ({ network }) => {
         })
       }
     })
-  }
-
-  if (averageResults) {
-    runs = averageRuns(runs)
+    ]
   }
 
   return (
@@ -57,6 +44,7 @@ const TimestampGraph: React.FC<TimestampGraphProps> = ({ network }) => {
         datasets: data.datasets
       }}
       options={{
+        ...getOptions('Accuracy (%) over time'),
         indexAxis: 'x',
         scales: {
           x: {
@@ -65,7 +53,6 @@ const TimestampGraph: React.FC<TimestampGraphProps> = ({ network }) => {
           }
         }
       }}
-      // options={getOptions(`Relative Accuracy (%) compared to ${relativeName}. Values over 0% is better than ${relativeName}`)}
     />
   )
 }

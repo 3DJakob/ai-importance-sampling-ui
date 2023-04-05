@@ -27,6 +27,68 @@ export const averageRuns = (runs: Array<WithID<NetworkRun>>): Array<WithID<Netwo
   return newRuns
 }
 
+const getSegmentValue = (x: number[], y: number[], searchValue: number): number => {
+  // find the value for searchValue using linear interpolation
+  for (let i = 0; i < x.length - 1; i++) {
+    if (x[i] <= searchValue && x[i + 1] >= searchValue) {
+      const slope = (y[i + 1] - y[i]) / (x[i + 1] - x[i])
+      return slope * (searchValue - x[i]) + y[i]
+    }
+  }
+  // console.warn('could not find value for', searchValue)
+  return x[0]
+}
+
+export const averageRunVariableTime = (runs: Array<WithID<NetworkRun>>): WithID<NetworkRun> => {
+  const stepSize = 0.1
+  const smallestFinalTimestamp = Math.min(...runs.map(run => run.timestamps[run.timestamps.length - 1]))
+
+  const yValues = []
+  const xValues = []
+  let currentX = 0
+  while (currentX < smallestFinalTimestamp) {
+    let toRound = 0
+    for (const run of runs) {
+      const yValue = getSegmentValue(run.timestamps, run.accuracyTest, currentX)
+      toRound += yValue
+    }
+    yValues.push(toRound / runs.length)
+
+    xValues.push(currentX)
+
+    currentX += stepSize
+  }
+
+  const result: WithID<NetworkRun> = {
+    ...runs[0],
+    accuracyTest: yValues,
+    timestamps: xValues
+  }
+
+  return result
+}
+
+export const averageRunsVaribleTime = (runs: Array<WithID<NetworkRun>>): Array<WithID<NetworkRun>> => {
+  const sortedRuns: any = {}
+
+  // sort the runs by name
+  for (const run of runs) {
+    if (sortedRuns[run.name] == null) {
+      sortedRuns[run.name] = []
+    }
+    sortedRuns[run.name].push(run)
+  }
+
+  const resultingRuns = []
+
+  // average the runs
+  for (const runName in sortedRuns) {
+    resultingRuns.push(averageRunVariableTime(sortedRuns[runName]))
+  }
+
+  return resultingRuns
+}
+
 export interface TrendLine {
   slope: number
   yStart: number
