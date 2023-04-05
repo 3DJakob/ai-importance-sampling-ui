@@ -40,7 +40,8 @@ const getSegmentValue = (x: number[], y: number[], searchValue: number): number 
 }
 
 export const averageRunVariableTime = (runs: Array<WithID<NetworkRun>>): WithID<NetworkRun> => {
-  const stepSize = 0.1
+  const longestRunCount = Math.max(...runs.map(run => run.timestamps.length))
+  const stepSize = longestRunCount / 500
   const smallestFinalTimestamp = Math.min(...runs.map(run => run.timestamps[run.timestamps.length - 1]))
 
   const yValues = []
