@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import NetworkInfo from '../components/NetworkInfo'
 import collections from '../lib/collections'
 import styled from 'styled-components'
-import bg from '../assets/bg.webp'
+import bg from '../assets/bg.jpg'
 import { Network } from '../lib/types'
 import Loading from '../components/Loading'
 
@@ -19,6 +19,7 @@ const Background = styled.div`
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
+  overflow: scroll;
 `
 
 const Grid = styled.div`
