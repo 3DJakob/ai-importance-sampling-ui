@@ -20,6 +20,22 @@ const Run: React.FC<RunProps> = ({ run }) => {
 
   const color = getRunColor(run)
 
+  const copyData = (): void => {
+    const data = run.accuracyTest
+    const timestamps = run.timestamps
+
+    const headline = `${run.name} Accuracy, ${run.name} Timestamp \n`
+
+    // join data, time '\n' data, time '\n' ...
+    const text = data.map((val, i) => `${val}, ${timestamps[i]}`).join('\n')
+
+    // const text = data.join('\n')
+    navigator.clipboard.writeText(headline + text).catch(err => {
+      console.error('Could not copy data to clipboard', err)
+      alert('Could not copy data to clipboard')
+    })
+  }
+
   return (
     <tr>
       <td>{run.id}</td>
@@ -36,6 +52,7 @@ const Run: React.FC<RunProps> = ({ run }) => {
       </td>
       <td>{run.accuracyTest.length}</td>
       <td>{bestAccuracy * 100}%</td>
+      <td><button onClick={copyData}>Copy data</button></td>
     </tr>
   )
 }
