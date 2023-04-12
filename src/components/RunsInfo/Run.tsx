@@ -29,7 +29,6 @@ const Run: React.FC<RunProps> = ({ run }) => {
     // join data, time '\n' data, time '\n' ...
     const text = data.map((val, i) => `${val}, ${timestamps[i]}`).join('\n')
 
-    // const text = data.join('\n')
     navigator.clipboard.writeText(headline + text).catch(err => {
       console.error('Could not copy data to clipboard', err)
       alert('Could not copy data to clipboard')
