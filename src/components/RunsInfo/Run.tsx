@@ -33,6 +33,16 @@ const Run: React.FC<RunProps> = ({ run }) => {
       console.error('Could not copy data to clipboard', err)
       alert('Could not copy data to clipboard')
     })
+
+    // create .csv file
+    const csv = new Blob([headline + text], { type: 'text/csv' })
+    const url = URL.createObjectURL(csv)
+    const link = document.createElement('a')
+
+    // download file
+    link.href = url
+    link.download = `${run.name}.csv`
+    link.click()
   }
 
   return (
