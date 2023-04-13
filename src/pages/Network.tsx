@@ -30,6 +30,7 @@ import zoomPlugin from 'chartjs-plugin-zoom'
 import { getOptions } from '../lib/graph'
 import { getRunColor } from '../components/RunsInfo/Run'
 import TimestampGraph from '../components/TimestampAccuracyGraph'
+import TimeSavingGraph from '../components/TimeSavingGraph'
 
 ChartJS.register(
   CategoryScale,
@@ -152,6 +153,7 @@ const Network: React.FC = () => {
         </Row>
         <Runs runs={runs} />
         <TimestampGraph network={network} />
+        <TimeSavingGraph network={network} />
         <RelativeAccuracyGraph network={network} />
         <LossWindowGraph network={network} />
       </BottomContainer>
