@@ -1,6 +1,7 @@
 import randomColor from 'randomcolor'
 import React from 'react'
 import { NetworkRun, WithID } from '../../lib/types'
+import { dataToCSV } from '../../lib/csv'
 
 export interface RunProps {
   run: WithID<NetworkRun>
@@ -20,31 +21,6 @@ const Run: React.FC<RunProps> = ({ run }) => {
 
   const color = getRunColor(run)
 
-  const copyData = (): void => {
-    const data = run.accuracyTest
-    const timestamps = run.timestamps
-
-    const headline = `${run.name} Accuracy, ${run.name} Timestamp \n`
-
-    // join data, time '\n' data, time '\n' ...
-    const text = data.map((val, i) => `${val}, ${timestamps[i]}`).join('\n')
-
-    navigator.clipboard.writeText(headline + text).catch(err => {
-      console.error('Could not copy data to clipboard', err)
-      alert('Could not copy data to clipboard')
-    })
-
-    // create .csv file
-    const csv = new Blob([headline + text], { type: 'text/csv' })
-    const url = URL.createObjectURL(csv)
-    const link = document.createElement('a')
-
-    // download file
-    link.href = url
-    link.download = `${run.name}.csv`
-    link.click()
-  }
-
   return (
     <tr>
       <td>{run.id}</td>
@@ -61,7 +37,7 @@ const Run: React.FC<RunProps> = ({ run }) => {
       </td>
       <td>{run.accuracyTest.length}</td>
       <td>{bestAccuracy * 100}%</td>
-      <td><button onClick={copyData}>Copy data</button></td>
+      <td><button onClick={() => dataToCSV(run.accuracyTest, run.timestamps, run.name)}>Copy data</button></td>
     </tr>
   )
 }
