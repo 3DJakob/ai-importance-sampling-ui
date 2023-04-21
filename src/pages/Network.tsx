@@ -32,6 +32,7 @@ import { getRunColor } from '../components/RunsInfo/Run'
 import TimestampGraph from '../components/TimestampAccuracyGraph'
 import TimeSavingGraph from '../components/TimeSavingGraph'
 import DownloadGraphButton from '../components/DownloadGraphButton'
+import LossGraph from '../components/LossGraph'
 
 ChartJS.register(
   CategoryScale,
@@ -155,6 +156,7 @@ const Network: React.FC = () => {
         </Row>
         <Runs runs={runs} />
         <TimestampGraph network={network} />
+        <LossGraph network={network} />
         <TimeSavingGraph network={network} />
         <RelativeAccuracyGraph network={network} />
         <LossWindowGraph network={network} />
