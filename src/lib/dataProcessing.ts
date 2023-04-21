@@ -39,34 +39,39 @@ const getSegmentValue = (x: number[], y: number[], searchValue: number): number 
   return x[0]
 }
 
+const propertiesToAverage: Array<'accuracyTest' | 'lossTest'> = ['accuracyTest', 'lossTest']
+
 export const averageRunVariableTime = (runs: Array<WithID<NetworkRun>>): WithID<NetworkRun> => {
   const longestRunCount = Math.max(...runs.map(run => run.timestamps.length))
   const stepSize = longestRunCount / 500
   const smallestFinalTimestamp = Math.min(...runs.map(run => run.timestamps[run.timestamps.length - 1]))
-
-  const yValues = []
   const xValues = []
   let currentX = 0
+
+  const newRun = { ...runs[0] }
+
+  for (const property of propertiesToAverage) {
+    newRun[property] = []
+  }
+
   while (currentX < smallestFinalTimestamp) {
-    let toRound = 0
-    for (const run of runs) {
-      const yValue = getSegmentValue(run.timestamps, run.accuracyTest, currentX)
-      toRound += yValue
+    for (const property of propertiesToAverage) {
+      let toRound = 0
+      for (const run of runs) {
+        const yValue = getSegmentValue(run.timestamps, run[property], currentX)
+        toRound += yValue
+      }
+      newRun[property].push(toRound / runs.length)
     }
-    yValues.push(toRound / runs.length)
 
     xValues.push(currentX)
 
     currentX += stepSize
   }
 
-  const result: WithID<NetworkRun> = {
-    ...runs[0],
-    accuracyTest: yValues,
-    timestamps: xValues
-  }
+  newRun.timestamps = xValues
 
-  return result
+  return newRun
 }
 
 export const averageRunsVaribleTime = (runs: Array<WithID<NetworkRun>>): Array<WithID<NetworkRun>> => {
