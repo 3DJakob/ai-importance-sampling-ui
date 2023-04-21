@@ -31,6 +31,7 @@ import { getOptions } from '../lib/graph'
 import { getRunColor } from '../components/RunsInfo/Run'
 import TimestampGraph from '../components/TimestampAccuracyGraph'
 import TimeSavingGraph from '../components/TimeSavingGraph'
+import DownloadGraphButton from '../components/DownloadGraphButton'
 
 ChartJS.register(
   CategoryScale,
@@ -145,6 +146,7 @@ const Network: React.FC = () => {
       </TopContainer>
       <BottomContainer>
         <Line options={getOptions('Accuracy over batch number')} data={data} />
+        <DownloadGraphButton data={data} />
         <Row>
           <p style={{ marginRight: 10 }}>Average out runs</p><Switch checked={averageResults} onChange={setAverageResults} />
         </Row>

@@ -7,6 +7,7 @@ import { Line } from 'react-chartjs-2'
 import { averageRunsVaribleTime } from '../lib/dataProcessing'
 import { getOptions } from '../lib/graph'
 import { computeXDistanceGraphFromRuns } from '../lib/data/secondsAhead'
+import DownloadGraphButton from './DownloadGraphButton'
 
 export interface TimeSavingGraphProps {
   network: Network
@@ -46,21 +47,27 @@ const TimeSavingGraph: React.FC<TimeSavingGraphProps> = ({ network }) => {
   }
 
   return (
-    <Line
-      data={{
+    <>
+      <Line
+        data={{
+          datasets: data2.datasets
+        }}
+        options={{
+          ...getOptions('Seconds ahead of uniform at that accuracy'),
+          indexAxis: 'x',
+          scales: {
+            x: {
+              type: 'linear',
+              position: 'bottom'
+            }
+          }
+        }}
+      />
+      <DownloadGraphButton data={{
         datasets: data2.datasets
       }}
-      options={{
-        ...getOptions('Seconds ahead of uniform at that accuracy'),
-        indexAxis: 'x',
-        scales: {
-          x: {
-            type: 'linear',
-            position: 'bottom'
-          }
-        }
-      }}
-    />
+      />
+    </>
   )
 }
 

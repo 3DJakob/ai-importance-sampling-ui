@@ -7,6 +7,7 @@ import useAverageResults from '../lib/useAverageResults'
 import { averageRuns } from '../lib/dataProcessing'
 import { getOptions } from '../lib/graph'
 import { getRunColor } from './RunsInfo/Run'
+import DownloadGraphButton from './DownloadGraphButton'
 
 export interface RelativeAccuracyGraphProps {
   network: Network
@@ -56,29 +57,34 @@ const RelativeAccuracyGraph: React.FC<RelativeAccuracyGraphProps> = ({ network }
 
   const redLine = baseLine.map(() => 0)
 
+  const chartData = {
+    labels: baseLine.map((_, i) => i),
+    datasets: [
+      ...plotRuns.map((run, i) => {
+        return {
+          label: run.name,
+          data: run.accuracyTest.map(val => val * 100),
+          fill: false,
+          borderColor: getRunColor(run)
+        }
+      }),
+      {
+        label: 'Zero',
+        data: redLine,
+        fill: false,
+        borderColor: 'rgb(255, 0, 0)'
+      }
+    ]
+  }
+
   return (
-    <Line
-      data={{
-        labels: baseLine.map((_, i) => i),
-        datasets: [
-          ...plotRuns.map((run, i) => {
-            return {
-              label: run.name,
-              data: run.accuracyTest.map(val => val * 100),
-              fill: false,
-              borderColor: getRunColor(run)
-            }
-          }),
-          {
-            label: 'Zero',
-            data: redLine,
-            fill: false,
-            borderColor: 'rgb(255, 0, 0)'
-          }
-        ]
-      }}
-      options={getOptions(`Relative Accuracy (%) compared to ${relativeName}. Values over 0% is better than ${relativeName}`)}
-    />
+    <>
+      <Line
+        data={chartData}
+        options={getOptions(`Relative Accuracy (%) compared to ${relativeName}. Values over 0% is better than ${relativeName}`)}
+      />
+      <DownloadGraphButton data={chartData} />
+    </>
   )
 }
 

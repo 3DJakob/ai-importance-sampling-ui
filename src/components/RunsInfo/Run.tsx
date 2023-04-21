@@ -37,7 +37,7 @@ const Run: React.FC<RunProps> = ({ run }) => {
       </td>
       <td>{run.accuracyTest.length}</td>
       <td>{bestAccuracy * 100}%</td>
-      <td><button onClick={() => dataToCSV(run.accuracyTest, run.timestamps, run.name)}>Copy data</button></td>
+      <td><button onClick={() => dataToCSV(run.accuracyTest, [run.timestamps], run.name)}>Copy data</button></td>
     </tr>
   )
 }

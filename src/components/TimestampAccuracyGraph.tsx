@@ -6,6 +6,8 @@ import useAverageResults from '../lib/useAverageResults'
 import { Line } from 'react-chartjs-2'
 import { averageRunsVaribleTime } from '../lib/dataProcessing'
 import { getOptions } from '../lib/graph'
+import { ChartData } from 'chart.js'
+import DownloadGraphButton from './DownloadGraphButton'
 
 export interface TimestampGraphProps {
   network: Network
@@ -23,7 +25,7 @@ const TimestampGraph: React.FC<TimestampGraphProps> = ({ network }) => {
     runs = averageRunsVaribleTime(runs)
   }
 
-  const data = {
+  const data: ChartData<'line', Array<{ x: number, y: number }>, number> = {
     datasets: [...runs.map(run => {
       return {
         label: run.name,
@@ -39,21 +41,22 @@ const TimestampGraph: React.FC<TimestampGraphProps> = ({ network }) => {
   }
 
   return (
-    <Line
-      data={{
-        datasets: data.datasets
-      }}
-      options={{
-        ...getOptions('Accuracy (%) over time'),
-        indexAxis: 'x',
-        scales: {
-          x: {
-            type: 'linear',
-            position: 'bottom'
+    <>
+      <Line
+        data={data}
+        options={{
+          ...getOptions('Accuracy (%) over time'),
+          indexAxis: 'x',
+          scales: {
+            x: {
+              type: 'linear',
+              position: 'bottom'
+            }
           }
-        }
-      }}
-    />
+        }}
+      />
+      <DownloadGraphButton data={data} />
+    </>
   )
 }
 

@@ -3,6 +3,7 @@ import { Network } from '../lib/types'
 import { Line } from 'react-chartjs-2'
 import { useCollection } from 'react-firebase-hooks/firestore'
 import { getLossCollection } from '../lib/collections'
+import DownloadGraphButton from './DownloadGraphButton'
 
 export const options = {
   responsive: true,
@@ -60,6 +61,7 @@ const LossWindowGraph: React.FC<LossWindowGraphProps> = ({ network }) => {
   return (
     <div>
       <Line options={options} data={data} />
+      <DownloadGraphButton data={data} />
     </div>
   )
 }
