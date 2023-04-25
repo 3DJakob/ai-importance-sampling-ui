@@ -18,6 +18,7 @@ export interface NetworkRun {
   lossTrain: number[]
   lossTest: number[]
   name: string
+  importanceSamplingToggleIndex?: number
 }
 
 export interface NetworkLoss {

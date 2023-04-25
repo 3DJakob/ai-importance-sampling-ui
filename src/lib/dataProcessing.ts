@@ -48,6 +48,10 @@ export const averageRunVariableTime = (runs: Array<WithID<NetworkRun>>): WithID<
   const xValues = []
   let currentX = 0
 
+  const averageImportanceSamplingToggleAccuracyTestValue = runs
+    .map(run => run.accuracyTest[run.importanceSamplingToggleIndex != null ? run.importanceSamplingToggleIndex : 0])
+    .reduce((a, b) => a + b, 0) / runs.length
+
   const newRun = { ...runs[0] }
 
   for (const property of propertiesToAverage) {
@@ -70,6 +74,7 @@ export const averageRunVariableTime = (runs: Array<WithID<NetworkRun>>): WithID<
   }
 
   newRun.timestamps = xValues
+  newRun.importanceSamplingToggleIndex = newRun.accuracyTest.findIndex((value, i) => value < averageImportanceSamplingToggleAccuracyTestValue && newRun.accuracyTest[i + 1] > averageImportanceSamplingToggleAccuracyTestValue)
 
   return newRun
 }

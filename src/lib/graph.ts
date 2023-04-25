@@ -25,6 +25,14 @@ export const getOptions = (title: string): any => {
           mode: 'xy'
         }
       }
+    },
+    elements: {
+      point: {
+        // @ts-expect-error
+        radius: (context) => context.dataIndex === context.dataset.importanceSamplingToggleIndex ? 16 : 2,
+        // @ts-expect-error
+        pointStyle: (ctx) => ctx.dataIndex === ctx.chart.data.datasets[ctx.datasetIndex].importanceSamplingToggleIndex ? 'star' : 'circle'
+      }
     }
   }
 }

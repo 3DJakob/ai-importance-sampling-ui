@@ -110,7 +110,8 @@ const Network: React.FC = () => {
     datasets: processedRuns.map((run, i) => ({
       label: run.name,
       data: run.accuracyTest,
-      borderColor: getRunColor(run)
+      borderColor: getRunColor(run),
+      importanceSamplingToggleIndex: run.importanceSamplingToggleIndex
     }))
   }
 
@@ -132,7 +133,7 @@ const Network: React.FC = () => {
         }
       })
 
-      trendDataSets.forEach(trendDataSet => data.datasets.push(trendDataSet))
+      trendDataSets.forEach(trendDataSet => data.datasets.push({ ...trendDataSet, importanceSamplingToggleIndex: undefined }))
     }
   }
 

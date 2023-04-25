@@ -34,7 +34,8 @@ const LossGraph: React.FC<LossGraphProps> = ({ network }) => {
             x: run.timestamps[i],
             y: val
           }
-        })
+        }),
+        importanceSamplingToggleIndex: run.importanceSamplingToggleIndex
       }
     })
     ]

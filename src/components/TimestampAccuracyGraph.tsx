@@ -34,7 +34,8 @@ const TimestampGraph: React.FC<TimestampGraphProps> = ({ network }) => {
             x: run.timestamps[i],
             y: val
           }
-        })
+        }),
+        importanceSamplingToggleIndex: run.importanceSamplingToggleIndex
       }
     })
     ]
