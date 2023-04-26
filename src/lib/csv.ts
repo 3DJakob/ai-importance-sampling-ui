@@ -3,11 +3,16 @@ import { ChartData } from 'chart.js'
 export const dataToCSV = (x: number[], ys: number[][], filename: string = 'data', labels = ['Accuracy, Timestamp']): void => {
   const headline = labels.join(', ') + '\n'
 
+  const longestSeries = [x, ...ys].reduce((longest, current) => current.length > longest.length ? current : longest, []).length
+
   // join time, data1, data2 '\n' time, data1, data2 '\n' ...
-  const text = x.map((time, i) => {
-    const data = ys.map(y => y[i]).join(', ')
-    return `${time}, ${data}`
-  }).join('\n')
+  const data = [x, ...ys]
+  let text = ''
+
+  for (let i = 0; i < longestSeries; i++) {
+    const rowText = data.map((d, j) => d.length > i ? d[i] : '').join(', ')
+    text += rowText + '\n'
+  }
 
   navigator.clipboard.writeText(headline + text).catch(err => {
     console.error('Could not copy data to clipboard', err)
