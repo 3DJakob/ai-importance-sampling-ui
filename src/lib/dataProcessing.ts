@@ -41,9 +41,7 @@ const getSegmentValue = (x: number[], y: number[], searchValue: number): number 
 
 const propertiesToAverage: Array<'accuracyTest' | 'lossTest'> = ['accuracyTest', 'lossTest']
 
-export const averageRunVariableTime = (runs: Array<WithID<NetworkRun>>): WithID<NetworkRun> => {
-  const longestRunCount = Math.max(...runs.map(run => run.timestamps.length))
-  const stepSize = longestRunCount / 500
+export const averageRunVariableTime = (runs: Array<WithID<NetworkRun>>, stepSize: number): WithID<NetworkRun> => {
   const smallestFinalTimestamp = Math.min(...runs.map(run => run.timestamps[run.timestamps.length - 1]))
   const xValues = []
   let currentX = 0
@@ -92,9 +90,11 @@ export const averageRunsVaribleTime = (runs: Array<WithID<NetworkRun>>): Array<W
 
   const resultingRuns = []
 
+  const longestRunTime = Math.max(...runs.map(run => run.timestamps[run.timestamps.length - 1]))
+  const stepsize = longestRunTime / 200
   // average the runs
   for (const runName in sortedRuns) {
-    resultingRuns.push(averageRunVariableTime(sortedRuns[runName]))
+    resultingRuns.push(averageRunVariableTime(sortedRuns[runName], stepsize))
   }
 
   return resultingRuns
