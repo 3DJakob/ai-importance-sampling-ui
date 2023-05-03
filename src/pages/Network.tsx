@@ -16,9 +16,7 @@ import { getRunCollection } from '../lib/collections'
 import NetworkInfo from '../components/NetworkInfo'
 import styled from 'styled-components'
 import Switch from 'react-switch'
-import { arrayToChartData, averageRuns, chartDataToArray, toTrendLine } from '../lib/dataProcessing'
 import ModelVisualization from '../components/ModelVisualization'
-import { Line } from 'react-chartjs-2'
 import { useLoaderData } from 'react-router-dom'
 import BackButton from '../components/BackButton'
 import LossWindowGraph from '../components/LossWindowGraph'
@@ -27,12 +25,10 @@ import Runs from '../components/RunsInfo'
 import useShowTrendlines from '../lib/useShowTrendlines'
 import useAverageResults from '../lib/useAverageResults'
 import zoomPlugin from 'chartjs-plugin-zoom'
-import { getOptions } from '../lib/graph'
-import { getRunColor } from '../components/RunsInfo/Run'
 import TimestampGraph from '../components/TimestampAccuracyGraph'
 import TimeSavingGraph from '../components/TimeSavingGraph'
-import DownloadGraphButton from '../components/DownloadGraphButton'
 import LossGraph from '../components/LossGraph'
+import BatchAccuracyGraph from '../components/BatchAccuracyGraph'
 
 ChartJS.register(
   CategoryScale,
@@ -84,11 +80,9 @@ const Network: React.FC = () => {
   let runs = firebaseRuns?.docs.map(doc => ({ ...doc.data(), id: doc.id })) as Array<WithID<NetworkRun>>
   const [averageResults, setAverageResults] = useAverageResults()
   const [showTrendLines, setShowTrendLines] = useShowTrendlines()
-
   if (runs == null) {
     runs = []
   }
-  let processedRuns = runs
 
   if (network == null) {
     return <div>Could not find the network</div>
@@ -96,45 +90,6 @@ const Network: React.FC = () => {
 
   if (error != null) {
     return <div>Error: {error.message}</div>
-  }
-
-  if (averageResults) {
-    processedRuns = averageRuns(runs)
-  }
-
-  // create labels as indexed list of size networks[0].accuracyTest.length
-  const labels = processedRuns.length > 0 ? Array.from(Array(processedRuns[0].accuracyTest.length).keys()) : []
-
-  const data = {
-    labels,
-    datasets: processedRuns.map((run, i) => ({
-      label: run.name,
-      data: run.accuracyTest,
-      borderColor: getRunColor(run),
-      importanceSamplingToggleIndex: run.importanceSamplingToggleIndex
-    }))
-  }
-
-  if (showTrendLines) {
-    if (data.datasets.length > 0) {
-      const trendDataSets = data.datasets.map(dataset => {
-        const cutIndex = dataset.data.findIndex(value => isNaN(value))
-        if (cutIndex !== -1) {
-          dataset.data = dataset.data.slice(0, cutIndex)
-        }
-        const chartData = arrayToChartData(dataset.data)
-        const { predict } = toTrendLine(chartData)
-        const trendLine = chartDataToArray(Array.from(Array(dataset.data.length).keys()).map(index => predict(index)))
-
-        return {
-          label: dataset.label + ' trend line',
-          data: trendLine,
-          borderColor: dataset.borderColor
-        }
-      })
-
-      trendDataSets.forEach(trendDataSet => data.datasets.push({ ...trendDataSet, importanceSamplingToggleIndex: undefined }))
-    }
   }
 
   return (
@@ -147,8 +102,7 @@ const Network: React.FC = () => {
         </Floating>
       </TopContainer>
       <BottomContainer>
-        <Line options={getOptions('Accuracy over batch number')} data={data} />
-        <DownloadGraphButton data={data} />
+        <BatchAccuracyGraph network={network} />
         <Row>
           <p style={{ marginRight: 10 }}>Average out runs</p><Switch checked={averageResults} onChange={setAverageResults} />
         </Row>
