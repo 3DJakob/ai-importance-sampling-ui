@@ -28,7 +28,7 @@ const TimeSavingGraph: React.FC<TimeSavingGraphProps> = ({ network }) => {
   const foo = computeXDistanceGraphFromRuns(runs)
 
   const data2 = foo !== null && {
-    datasets: foo.map(run => {
+    datasets: foo.filter(r => r.visible).map(run => {
       return {
         label: run.name,
         data: run.accuracyTest.map((val, i) => {

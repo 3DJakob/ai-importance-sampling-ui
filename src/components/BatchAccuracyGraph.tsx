@@ -42,7 +42,7 @@ const BatchAccuracyGraph: React.FC<BatchAccuracyGraphProps> = ({ network }) => {
 
   const data = {
     labels,
-    datasets: processedRuns.map((run, i) => ({
+    datasets: processedRuns.filter(r => r.visible).map((run, i) => ({
       label: run.name,
       data: run.accuracyTest,
       borderColor: getRunColor(run),

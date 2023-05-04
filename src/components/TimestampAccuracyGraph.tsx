@@ -26,7 +26,7 @@ const TimestampGraph: React.FC<TimestampGraphProps> = ({ network }) => {
   }
 
   const data: ChartData<'line', Array<{ x: number, y: number }>, number> = {
-    datasets: [...runs.map(run => {
+    datasets: runs.filter(r => r.visible).map(run => {
       return {
         label: run.name,
         data: run.accuracyTest.map((val, i) => {
@@ -38,7 +38,6 @@ const TimestampGraph: React.FC<TimestampGraphProps> = ({ network }) => {
         importanceSamplingToggleIndex: run.importanceSamplingToggleIndex
       }
     })
-    ]
   }
 
   return (

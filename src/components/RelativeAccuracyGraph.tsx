@@ -60,7 +60,7 @@ const RelativeAccuracyGraph: React.FC<RelativeAccuracyGraphProps> = ({ network }
   const chartData = {
     labels: baseLine.map((_, i) => i),
     datasets: [
-      ...plotRuns.map((run, i) => {
+      ...plotRuns.filter(r => r.visible).map((run, i) => {
         return {
           label: run.name,
           data: run.accuracyTest.map(val => val * 100),

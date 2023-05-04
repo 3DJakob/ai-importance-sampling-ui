@@ -26,7 +26,7 @@ const LossGraph: React.FC<LossGraphProps> = ({ network }) => {
   }
 
   const data: ChartData<'line', Array<{ x: number, y: number }>, number> = {
-    datasets: [...runs.map(run => {
+    datasets: runs.filter(r => r.visible).map(run => {
       return {
         label: run.name,
         data: run.lossTest.map((val, i) => {
@@ -38,7 +38,6 @@ const LossGraph: React.FC<LossGraphProps> = ({ network }) => {
         importanceSamplingToggleIndex: run.importanceSamplingToggleIndex
       }
     })
-    ]
   }
 
   return (
