@@ -3,6 +3,8 @@ import { NetworkRun, WithID } from '../../lib/types'
 import Table, { TableTheme } from '../Table'
 import Run from './Run'
 import { useState } from 'react'
+import { updateDoc } from 'firebase/firestore'
+import { getRunDocument } from '../../lib/collections'
 
 const Container = styled.div`
   display: flex;
@@ -18,6 +20,7 @@ export interface RunsProps {
 const Runs: React.FC<RunsProps> = ({ runs, networkID }) => {
   const [sortBy, setSortBy] = useState<string | undefined>('id')
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc')
+  const [showAll, setShowAll] = useState<boolean>(false)
 
   const preparedData = runs.map((run) => {
     const bestAccuracy = run.accuracyTest.reduce((acc, curr) => {
@@ -46,6 +49,26 @@ const Runs: React.FC<RunsProps> = ({ runs, networkID }) => {
     }
   }
 
+  const toggleVisibility = (): void => {
+    const toUpdate = preparedData.map(r => r.id)
+
+    // for each run, update visibility
+    toUpdate.forEach((id) => {
+      const docRef = getRunDocument(networkID, id)
+
+      updateDoc(docRef, {
+        visible: showAll
+      }).catch((error) => {
+        console.error('Error updating document: ', error)
+        alert('Error updating document')
+      }).finally(() => {
+        console.log('Document successfully updated!')
+      })
+    })
+
+    setShowAll(!showAll)
+  }
+
   return (
     <Container>
       <Table
@@ -57,7 +80,7 @@ const Runs: React.FC<RunsProps> = ({ runs, networkID }) => {
               <th style={{ cursor: 'pointer' }} onClick={() => toggleSortBy('name')}>Color</th>
               <th style={{ cursor: 'pointer' }} onClick={() => toggleSortBy('batches')}>Batches</th>
               <th style={{ cursor: 'pointer' }} onClick={() => toggleSortBy('bestAccuracy')}>Best Accuracy</th>
-              <th style={{ cursor: 'pointer' }} onClick={() => toggleSortBy('visibility')}>Visibility</th>
+              <th style={{ cursor: 'pointer' }} onClick={() => toggleSortBy('visibility')}>Visibility <button onClick={toggleVisibility}>Toggle all</button></th>
               <th style={{ cursor: 'pointer' }} onClick={() => toggleSortBy('bestAccuracy')}>Copy</th>
             </tr>
           </thead>
