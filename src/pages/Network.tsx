@@ -109,7 +109,7 @@ const Network: React.FC = () => {
         <Row>
           <p style={{ marginRight: 10 }}>Show trend lines</p><Switch checked={showTrendLines} onChange={setShowTrendLines} />
         </Row>
-        <Runs runs={runs} />
+        <Runs runs={runs} networkID={network.name} />
         <TimestampGraph network={network} />
         <LossGraph network={network} />
         <TimeSavingGraph network={network} />
