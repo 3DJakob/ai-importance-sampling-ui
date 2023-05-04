@@ -18,6 +18,11 @@ const BatchAccuracyGraph: React.FC<BatchAccuracyGraphProps> = ({ network }) => {
   const [firebaseRuns, , error] = useCollection(getRunCollection(network?.name ?? ''))
 
   let runs = firebaseRuns?.docs.map(doc => ({ ...doc.data(), id: doc.id })) as Array<WithID<NetworkRun>>
+
+  if (runs == null) {
+    runs = []
+  }
+
   let processedRuns = runs
 
   if (network == null) {
@@ -32,9 +37,6 @@ const BatchAccuracyGraph: React.FC<BatchAccuracyGraphProps> = ({ network }) => {
     processedRuns = averageRuns(runs)
   }
 
-  if (runs == null) {
-    runs = []
-  }
   // create labels as indexed list of size networks[0].accuracyTest.length
   const labels = processedRuns.length > 0 ? Array.from(Array(processedRuns[0].accuracyTest.length).keys()) : []
 
