@@ -29,6 +29,7 @@ import TimestampGraph from '../components/TimestampAccuracyGraph'
 import TimeSavingGraph from '../components/TimeSavingGraph'
 import LossGraph from '../components/LossGraph'
 import BatchAccuracyGraph from '../components/BatchAccuracyGraph'
+import ImageSamples from '../components/ImageSamples'
 
 ChartJS.register(
   CategoryScale,
@@ -109,6 +110,7 @@ const Network: React.FC = () => {
         <Row>
           <p style={{ marginRight: 10 }}>Show trend lines</p><Switch checked={showTrendLines} onChange={setShowTrendLines} />
         </Row>
+        <ImageSamples />
         <Runs runs={runs} networkID={network.name} />
         <TimestampGraph network={network} />
         <LossGraph network={network} />
