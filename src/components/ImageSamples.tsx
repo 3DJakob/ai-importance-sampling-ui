@@ -30,8 +30,8 @@ const getFolder = (): string | null => {
     return 'mnist'
   }
 
-  if (url?.includes('camyleon') === true) {
-    return 'camyleon'
+  if (url?.includes('camelyon') === true) {
+    return 'camelyon'
   }
 
   return null
